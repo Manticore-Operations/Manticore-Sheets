@@ -1,6 +1,7 @@
 const MORed = [245, 117, 117];
 const MOGray = [189, 189, 189];
 
+// Finds the sheet by name and returns the sheet object
 function getSheet(sheetName) {
   let sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
   //console.log(sheet);
