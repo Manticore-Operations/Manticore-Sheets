@@ -56,6 +56,18 @@ function refreshFilters(sheetName) {
   return true;
 }
 
+// Checks whether the given date is in the past. Accuracy is down to one day.
+// Input: Date object
+function isInThePast(date) {
+  const now = new Date();
+
+  //console.log(date.toString() + " | " + now.toString())
+  if (date.getUTCFullYear() < now.getUTCFullYear()) return true
+  if (date.getUTCMonth() < now.getUTCMonth()) return true
+  if (date.getUTCDate() + 1 < now.getUTCDate()) return true
+  return false;
+};
+
 // Updates and changes the color of the past and upcoming operation
 function updateHighlight(sheetName) {
   console.log("Updating row colors...");
@@ -64,14 +76,13 @@ function updateHighlight(sheetName) {
 
   let rows = getOperations(sheet);
   rows.every( (row) => {
-    
-    const now = Date.now();
-    if (row[2].getTime() > now) {
-      changeRowBackground(sheet, row[0], MORed);
-      return false;
+    if (isInThePast(row[2])) {
+      changeRowBackground(sheet, row[0], MOGray);
+      return true;
     };
-    changeRowBackground(sheet, row[0], MOGray);
-    return true;
+    console.log(`NEXT OPERATION: ${row[4]} by ${row[3]}`);
+    changeRowBackground(sheet, row[0], MORed);
+    return false;
  });
 
   console.log("Row colors updated");
@@ -79,13 +90,19 @@ function updateHighlight(sheetName) {
 }
 
 function main() {
+  /*
+  refreshFilters("test");
+  updateHighlight("test");
+  */
   const sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
   sheets.forEach( sheet => {
+    console.log("---------------------------");
     console.log(`Updating sheet ${sheet.getSheetName()}`)
     refreshFilters(sheet.getSheetName());
     updateHighlight(sheet.getSheetName());
   });
 
+  console.log("ALL SHEETS UPDATED");
   return true;
 }
 
