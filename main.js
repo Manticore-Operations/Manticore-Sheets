@@ -60,11 +60,14 @@ function refreshFilters(sheetName) {
 // Input: Date object
 function isInThePast(date) {
   const now = new Date();
+  date.setDate(date.getDate() + 1);
 
   //console.log(date.toString() + " | " + now.toString())
   if (date.getUTCFullYear() < now.getUTCFullYear()) return true
+  //console.log(date, date.getUTCDate(), now.getUTCDate())
   if (date.getUTCMonth() < now.getUTCMonth()) return true
-  if (date.getUTCDate() + 1 < now.getUTCDate()) return true
+  if (date.getUTCDate() < now.getUTCDate()) return true
+  //console.log(date.getUTCDate(), now.getUTCDate());
   return false;
 };
 
@@ -107,4 +110,3 @@ function main() {
 }
 
 main();
-
